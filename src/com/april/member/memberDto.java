@@ -3,9 +3,11 @@ package com.april.member;
 import java.io.Serializable;
 
 public class memberDto {
+	private static final long serialVersionUID = 1L;
+	
 	private String id;
 	private String name;
-	private String pw;
+	private transient String pw;
 	private String email;
 	private int authority;
 	
