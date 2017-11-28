@@ -1,5 +1,11 @@
 package com.april.member;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class memberDao implements imemberDao {
 	private boolean isSuccess = false;
 	private static memberDao memberDao;
@@ -21,16 +27,55 @@ public class memberDao implements imemberDao {
 		return memberDao;
 	}
 	
-	//디비 연결 메소드
+	public static Connection getConnection() throws SQLException{
+		Connection connection = null;
+		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		String user = "hr";
+		String password = "hr";
+		
+		connection = DriverManager.getConnection(url, user, password);
+		
+		return connection;
+	}
 	
-	//디비 연결 종료하는 메서드
-	
-	//디비 닫는 메소드
+	public static void close(Connection conn, PreparedStatement psmt, ResultSet rs){
+		if(rs != null){
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				//예외 표시에 대하여 ...
+				//e.printStackTrace();}
+			}
+		}
+		if(psmt != null){
+			try {
+				psmt.close();
+			} catch (SQLException e) {}
+		}
+		if(conn != null){
+			try {
+				conn.close();
+			} catch (SQLException e) {}
+		}
+	}
 	
 	@Override
 	public boolean addMember(memberDto member) {
-		//sql작성
-		return false;
+		
+		String sql = " INSERT INTO MEMBER "
+				+ " VALUES(?, ?, ?, ?, 3) ";
+		
+		Connection conne = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		
+		int count = 0;
+		
+		//연결하고
+		//로그 디버그
+		//작성해보기
+		
+		return ; //삼항연산자
 	}
 
 	@Override
