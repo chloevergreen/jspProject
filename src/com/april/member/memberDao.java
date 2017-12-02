@@ -65,17 +65,34 @@ public class memberDao implements imemberDao {
 		String sql = " INSERT INTO MEMBER "
 				+ " VALUES(?, ?, ?, ?, 3) ";
 		
-		Connection conne = null;
+		Connection conn = null;
 		PreparedStatement psmt = null;
 		ResultSet rs = null;
 		
 		int count = 0;
 		
-		//연결하고
-		//로그 디버그
-		//작성해보기
+		try{
+			conn = memberDao.getConnection();
+			log("2/6 Success");
+			
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, member.getId());
+			psmt.setString(2, member.getName());
+			psmt.setString(3, member.getPw());
+			psmt.setString(4, member.getEmail());
+			psmt.setInt(5, member.getAuthority());
+			log("3/6 Success");
+			
+			count = psmt.executeUpdate();
+			log("4/6 Success");
+		} catch (SQLException e) {
+			log("Fail", e);
+		} finally {
+			memberDao.close(conn, psmt, rs);
+			log("5/6 Success");
+		}
 		
-		return ; //삼항연산자
+		return count > 0 ? true : false;
 	}
 
 	@Override
