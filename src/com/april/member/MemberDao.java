@@ -6,23 +6,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class memberDao implements imemberDao {
+public class MemberDao implements InterfMemberDao {
 	private boolean isSuccess = false;
-	private static memberDao memberDao;
+	private static MemberDao memberDao;
 	
-	private memberDao(){
+	private MemberDao(){
 		try {
 			Class.forName("oracle.jdbc.diver.OracleDriver");
-			log("1/6 Success");
+			log("Success");
 		} catch (ClassNotFoundException e) {
-			log("1/6 Fail", e);
+			log("Fail", e);
 			System.out.println(e.getMessage());
 		}
 	}
 	
-	public static memberDao getInstance(){
+	public static MemberDao getInstance(){
 		if(memberDao == null){
-			memberDao = new memberDao();
+			memberDao = new MemberDao();
 		}
 		return memberDao;
 	}
@@ -42,10 +42,7 @@ public class memberDao implements imemberDao {
 		if(rs != null){
 			try {
 				rs.close();
-			} catch (SQLException e) {
-				//예외 표시에 대하여 ...
-				//e.printStackTrace();}
-			}
+			} catch (SQLException e) {}
 		}
 		if(psmt != null){
 			try {
@@ -60,7 +57,7 @@ public class memberDao implements imemberDao {
 	}
 	
 	@Override
-	public boolean addMember(memberDto member) {
+	public boolean addMember(MemberDto member) {
 		
 		String sql = " INSERT INTO MEMBER "
 				+ " VALUES(?, ?, ?, ?, 3) ";
@@ -73,7 +70,7 @@ public class memberDao implements imemberDao {
 		
 		try{
 			conn = memberDao.getConnection();
-			log("2/6 Success");
+			log("1/4 Success");
 			
 			psmt = conn.prepareStatement(sql);
 			psmt.setString(1, member.getId());
@@ -81,32 +78,70 @@ public class memberDao implements imemberDao {
 			psmt.setString(3, member.getPw());
 			psmt.setString(4, member.getEmail());
 			psmt.setInt(5, member.getAuthority());
-			log("3/6 Success");
+			log("2/4 Success");
 			
-			count = psmt.executeUpdate();
-			log("4/6 Success");
+			count = psmt.executeUpdate(); //executeUpdate() return 0 : nothing
+			log("3/4 Success");
 		} catch (SQLException e) {
 			log("Fail", e);
 		} finally {
 			memberDao.close(conn, psmt, rs);
-			log("5/6 Success");
+			log("4/4 Success");
 		}
 		
 		return count > 0 ? true : false;
 	}
 
 	@Override
-	public memberDto login(memberDto member) {
-		return null;
+	public MemberDto login(MemberDto member) {
+		String sql = " SELECT ID, NAME, EMAIL, AUTH FROM MEMBER WHERE ID = ? AND PW = ? ";
+		
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		
+		MemberDto loginMember = null;
+
+		try {
+			conn = memberDao.getConnection();
+			log("1/5 Success");
+			
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, member.getId());
+			psmt.setString(2, member.getPw());
+			log("2/5 Success");
+			
+			rs = psmt.executeQuery();
+			log("3/5 Success");
+			
+			while(rs.next()) {
+				String id = rs.getString(1);
+				String name = rs.getString(2);
+				String email = rs.getString(3);
+				int authority = rs.getInt(4);
+				
+				loginMember = new MemberDto(id, name, null, email, authority);
+			}
+			log("4/5 Success");
+			
+		} catch (SQLException e) {
+			log("Fail", e);
+		} finally {
+			memberDao.close(conn, psmt, rs);
+			log("5/5 Success");
+		}
+		
+		return loginMember;
 	}
 	
 	public void log(String msg){
+		isSuccess = true;
 		if(isSuccess){
 			System.out.println(getClass() + " : " + msg);
 		}
 	}
 	public void log(String msg, Exception e){
-		//isSuccess 를 true로 따로 대입 해야하는가...?
+		isSuccess = true;
 		if(isSuccess){
 			System.out.println(e + " : " + getClass() + " : " + msg);
 		}

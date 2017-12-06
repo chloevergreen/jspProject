@@ -2,7 +2,7 @@ package com.april.member;
 
 import java.io.Serializable;
 
-public class memberDto {
+public class MemberDto {
 	private static final long serialVersionUID = 1L;
 	
 	private String id_;
@@ -11,9 +11,9 @@ public class memberDto {
 	private String email_;
 	private int authority_;
 	
-	public memberDto(){}
+	public MemberDto(){}
 	
-	public memberDto(String id, String name, String pw, String email, int authority) {
+	public MemberDto(String id, String name, String pw, String email, int authority) {
 		this.id_ = id;
 		this.name_ = name;
 		this.pw_ = pw;
