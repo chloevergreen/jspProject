@@ -19,7 +19,6 @@ public class DeerClient {
 
 	public static void main(String[] args) {
 		try {
-			
 			//소켓 팩토리 생성
 			SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 			
