@@ -1,9 +1,5 @@
-<%@ page import = "java.security.KeyPairGenerator" %>
-<%@ page import = "java.security.KeyPair" %>
-<%@ page import = "java.security.KeyFactory" %>
-<%@ page import = "java.security.PublicKey" %>
 <%@ page import = "java.security.PrivateKey" %>
-<%@ page import = "java.security.spec.RSAPublicKeySpec" %>
+<%@ page import = "javax.crypto.Cipher" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,36 +8,33 @@
 		<title></title>
 	</head>
 	<body>
-		<script type = "text/javascript">
+<%!
+	public String decryptRsa(PrivateKey privateKey, String securedValue) {
+		String decruptedValue = "";
 		
-		</script>
-		<%
-		//HttpSession session = request.getSession();
-		boolean isSuccessLogin = false;
+		try{
 		
-		if(isSuccessLogin){
-			response.sendRedirect("main.jsp");
+			Cipher cipher = Cipher.getInstance("RSA");
+			/*
+			암호화 된 값은 byte 배열이다.
+			이를 문자열 폼으로 전송하기 위해 16진 문자열(hex)로 변경한다.
+			서버 측에서도 값을 받을 떼 hex 문자열을 받아서 이를 다시 byte 배열로 바꾼 뒤 복호화 과정을 수행한다.
+			*/
+			byte[] encryptedBytes = hexToByteArray(securedValue);
+		
+		}catch(Exception e){
+			
 		}
-		else{
-			KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-			generator.initialize(1024);
-			KeyPair keyPair = generator.genKeyPair();
-			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-			PublicKey publicKey = keyPair.getPublic();
-			PrivateKey privateKey = keyPair.getPrivate();
-			
-			//세션에 RSA 개인키를 세션에 저장함
-			session.setAttribute("_RSA_WEB_Key_", privateKey);
-			RSAPublicKeySpec publicSpec = keyFactory.getKeySpec(publicKey, RSAPublicKeySpec.class);
-			String publicKeyModulus = publicSpec.getModulus().toString(16);
-			String publicKeyExponent = publicSpec.getPublicExponent().toString(16);
-			
-			//로그인 폼에 Input Hidden에 값을 세팅하기 위해서
-			request.setAttribute("RSAModulus", publicKeyModulus);
-			request.setAttribute("RSAExponent", publicKeyExponent);
-			
-			response.sendRedirect("index.jsp");
-		}
+		
+		return decruptedValue;
+	}
+
+	public static byte[] hexToByteArray(String hex) {
+		byte[] bytes = new byte[hex.length() / 2];
+		return bytes;
+	}
 %>
+
+	<!-- 로그인 체크 -->
 	</body>
 </html>

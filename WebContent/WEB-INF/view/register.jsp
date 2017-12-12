@@ -6,7 +6,7 @@
 		<title></title>
 	</head>
 	<body>
-		<div class = "center">
+		<div>
 			<h1>회원 가입</h1>
 			
 			<form action = "registerAf.jsp">
