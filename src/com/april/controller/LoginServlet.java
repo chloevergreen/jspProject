@@ -1,18 +1,53 @@
-<%@ page import = "com.april.member.MemberDto" %>
-<%@ page import = "java.security.PrivateKey" %>
-<%@ page import = "javax.crypto.Cipher" %>
-<%@ page import = "org.json.simple.JSONObject" %>
-<%@ page import = "java.util.Map" %>
-<%@ page import = "java.util.List" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title></title>
-	</head>
-	<body>
-<%!
+package com.april.controller;
+
+import java.io.IOException;
+import java.security.PrivateKey;
+import java.util.List;
+import java.util.Map;
+
+import javax.crypto.Cipher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.json.simple.JSONObject;
+
+import com.april.controller.action.Action;
+import com.april.controller.controller.ActionFactory;
+import com.april.member.MemberDto;
+
+@WebServlet("/LoginServlet")
+public class LoginServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+    public LoginServlet() {
+        super();
+    }
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+		response.setContentType("text/html;charset=UTF-8");
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		
+		doGet(request, response);
+		
+		String command = request.getParameter("command");
+		System.out.println("LoginServlet에서 요청을 받음을 확인 : " + command);
+		
+		ActionFactory actionfactory = ActionFactory.getInstance();
+		Action action = actionfactory.getAction(command);
+		
+		if(action != null) {
+			action.execute(request, response);
+		}
+	}
+	
 	public String decryptRsa(PrivateKey privateKey, String securedValue) {
 		String decruptedValue = "";
 		
@@ -53,7 +88,7 @@
 		return bytes;
 	}
 	
-	/* 로그인 체크 */
+	/* 로그인 체크  /proc/login.proc*/
 	public JSONObject loginCheck(HttpServletRequest request, Map mMap) {
 		List<MemberDto> loginMembers = null;
 		JSONObject listObj = new JSONObject();
@@ -86,7 +121,4 @@
 		}
 		return listObj;
 	}
-	
-%>
-	</body>
-</html>
+}

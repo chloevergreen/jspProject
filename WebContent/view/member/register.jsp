@@ -20,7 +20,7 @@
 					</tr>
 				</table>
 			</form>
-			<a href = "view/index.jsp">홈</a>
+			<a href = "/index.jsp">홈</a>
 		</div>
 	</body>
 </html>
