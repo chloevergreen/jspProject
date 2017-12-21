@@ -7,7 +7,7 @@
 	</head>
 	<body>
 <%
-	response.sendRedirect("/view/member/login.jsp");
+	response.sendRedirect("/MainServlet");
 %>
 	</body>
 </html>
