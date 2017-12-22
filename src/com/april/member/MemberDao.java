@@ -59,8 +59,8 @@ public class MemberDao implements InterfMemberDao {
 	@Override
 	public boolean addMember(MemberDto member) {
 		
-		String sql = " INSERT INTO MEMBER "
-				+ " VALUES(?, ?, ?, ?, 3) ";
+		String sql = " INSERT INTO JSP_MEMBER "
+				+ " VALUES(?, ?, ?, ?, 2) ";
 		
 		Connection conn = null;
 		PreparedStatement psmt = null;
@@ -94,7 +94,7 @@ public class MemberDao implements InterfMemberDao {
 
 	@Override
 	public MemberDto login(MemberDto member) {
-		String sql = " SELECT ID, NAME, EMAIL, AUTH FROM MEMBER WHERE ID = ? AND PW = ? ";
+		String sql = " SELECT ID, NAME, EMAIL, AUTHORITY FROM JSP_MEMBER WHERE ID = ? AND PWD = ? ";
 		
 		Connection conn = null;
 		PreparedStatement psmt = null;

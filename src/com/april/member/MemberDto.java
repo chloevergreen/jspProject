@@ -2,6 +2,20 @@ package com.april.member;
 
 import java.io.Serializable;
 
+/*
+DROP TABLE JSP_MEMBER;
+
+CREATE TABLE JSP_MEMBER(
+	ID VARCHAR2(40) PRIMARY KEY,
+	PWD VARCHAR2(32) NOT NULL,
+	NAME VARCHAR2(50) NOT NULL,
+	EMAIL VARCHAR2(60) UNIQUE,
+	AUTHORITY NUMBER(1) NOT NULL
+);
+
+SELECT * FROM JSP_MEMBER;
+*/
+
 public class MemberDto {
 	private static final long serialVersionUID = 1L;
 	
