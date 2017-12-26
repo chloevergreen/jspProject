@@ -6,17 +6,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class MemberDao implements InterfMemberDao {
 	private boolean isSuccess = false;
 	private static MemberDao memberDao;
 	
+	Logger logger = LogManager.getLogger();
+	
 	private MemberDao(){
 		try {
-			Class.forName("oracle.jdbc.diver.OracleDriver");
+			Class.forName("oracle.jdbc.driver.OracleDriver");
 			log("Success");
+			logger.trace("Success");
 		} catch (ClassNotFoundException e) {
 			log("Fail", e);
 			System.out.println(e.getMessage());
+			logger.error("Fail");
 		}
 	}
 	
@@ -74,16 +81,18 @@ public class MemberDao implements InterfMemberDao {
 			
 			psmt = conn.prepareStatement(sql);
 			psmt.setString(1, member.getId());
-			psmt.setString(2, member.getName());
-			psmt.setString(3, member.getPw());
+			psmt.setString(2, member.getPw());
+			psmt.setString(3, member.getName());
 			psmt.setString(4, member.getEmail());
 			psmt.setInt(5, member.getAuthority());
 			log("2/4 Success");
 			
-			count = psmt.executeUpdate(); //executeUpdate() return 0 : nothing
+			count = psmt.executeUpdate();
 			log("3/4 Success");
+			
 		} catch (SQLException e) {
 			log("Fail", e);
+			
 		} finally {
 			memberDao.close(conn, psmt, rs);
 			log("4/4 Success");

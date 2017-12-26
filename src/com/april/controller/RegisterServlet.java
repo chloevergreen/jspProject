@@ -41,12 +41,12 @@ public class RegisterServlet extends HttpServlet {
 		if(isSuccessRegister) {
 			out.print("<script type='text/javascript'>"
 						+ "alert('가입되엇습니다.');"
-						+ "location.href='/view/board/boardList.jsp';</script");
+						+ "location.href='/view/board/boardList.jsp';</script>");
 			out.close();
 		}else {
 			out.print("<script type='text/javascript'>"
 					+ "alert('가입에 실패했습니다.');"
-					+ "location.href='/view/member/register.jsp';</script");
+					+ "location.href='/view/member/register.jsp';</script>");
 			out.close();
 		}
 	}
